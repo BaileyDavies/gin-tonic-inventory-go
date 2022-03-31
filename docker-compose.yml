@@ -1,0 +1,38 @@
+version: "3.7"
+
+volumes:
+  gintonicvolume:
+    name: gintonic-volume
+
+networks:
+  gintonicnetwork:
+    name: gintonic-network
+
+services:
+  pg:
+    image: postgres:12.0
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    volumes:
+      - gintonicvolume:/var/lib/postgresql/data
+      - ./db/scripts:/docker-entrypoint-initdb.d/
+    networks:
+      - gintonicnetwork
+  gintonic_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - pg
+    volumes:
+      - ./:/app
+    ports:
+      - 7777:7777
+    networks:
+      - gintonicnetwork
+    env_file:
+      - .env
+    entrypoint: ["/bin/bash", "./scripts/entrypoint.dev.sh"]
