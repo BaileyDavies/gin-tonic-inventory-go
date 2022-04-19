@@ -1,0 +1,2 @@
+ALTER TABLE gins ALTER COLUMN gin_description VARCHAR
+ALTER TABLE gins ADD COLUMN gin_size VARCHAR (50)

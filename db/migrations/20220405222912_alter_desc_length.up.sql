@@ -1,0 +1,1 @@
+ALTER TABLE brewers ALTER COLUMN brewer_description TYPE varchar

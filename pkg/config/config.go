@@ -16,6 +16,8 @@ type Config struct {
 	testDBName string
 	apiPort    string
 	migrate    string
+	redisPort  string
+	redisPass  string
 }
 
 // Setup a new config instance from the config struct
@@ -29,9 +31,13 @@ func Init() *Config {
 	flag.StringVar(&conf.dbPort, "dbport", os.Getenv("POSTGRES_PORT"), "Port for the production DB")
 	flag.StringVar(&conf.dbHost, "dbhost", os.Getenv("POSTGRES_HOST"), "Host for the production DB")
 	flag.StringVar(&conf.dbName, "dbname", os.Getenv("POSTGRES_DB"), "Name of the production DB")
+
 	flag.StringVar(&conf.testDBHost, "testdbhost", os.Getenv("TEST_DB_HOST"), "Host of the test DB")
 	flag.StringVar(&conf.testDBName, "testdbname", os.Getenv("TEST_DB_NAME"), "Name of the test DB")
 	flag.StringVar(&conf.apiPort, "apiPort", os.Getenv("API_PORT"), "API Port")
+	flag.StringVar(&conf.migrate, "migrate", "up", "specify if we should be migrating DB 'up' or 'down'")
+	flag.StringVar(&conf.redisPort, "redisport", os.Getenv("REDIS_PORT"), "Redis Cache Port")
+	flag.StringVar(&conf.redisPass, "redispass", os.Getenv("REDIS_PASS"), "Redis DB Pass")
 
 	flag.Parse()
 	return conf
@@ -56,5 +62,17 @@ func (c *Config) getDBConnStr(dbhost, dbname string) string {
 }
 
 func (c *Config) GetAPIPort() string {
-	return "" + c.apiPort
+	return ":" + c.apiPort
+}
+
+func (c *Config) GetMigration() string {
+	return c.migrate
+}
+
+func (c *Config) GetRedisPort() string {
+	return ":" + c.redisPort
+}
+
+func (c *Config) GetRedisPass() string {
+	return c.redisPass
 }
