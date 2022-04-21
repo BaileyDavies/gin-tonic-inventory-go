@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: gin-tonic-api
+    name: gin-tonic-api
+    namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gin-tonic-api
+  template:
+    metadata:
+      labels:
+        app: gin-tonic-api
+    spec:
+      containers:
+        - image: gin-tonic-api-v1:latest
+          imagePullPolicy: IfNotPresent
+          name: gin-tonic-api
+          resources:
+            request:
+              cpu: "1.0"
+              memory: "1G"
+            limits:
+              cpu: "1.0"
+              memory: "1G"
